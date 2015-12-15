@@ -90,6 +90,8 @@ ENDIF() # NOT CMAKE_BUILD_TYPE STREQUAL "Debug"
 # Pass them in list form, e.g.: "-j;2" for -j 2
 FUNCTION(SETUP_TARGET_FOR_COVERAGE _targetname _testrunner _outputname)
 
+message(${_testrunner})
+
 IF(NOT LCOV_PATH)
 MESSAGE(FATAL_ERROR "lcov not found! Aborting...")
 ENDIF() # NOT LCOV_PATH
@@ -109,7 +111,7 @@ COMMAND ${_testrunner} ${ARGV3}
 
 # Capturing lcov counters and generating report
 COMMAND ${LCOV_PATH} --directory . --capture --output-file ${_outputname}.info
-COMMAND ${LCOV_PATH} --remove ${_outputname}.info 'tests/*' '/usr/*' --output-file ${_outputname}.info.cleaned
+COMMAND ${LCOV_PATH} --remove ${_outputname}.info 'tests/*' '/usr/*' 'lib/*' --output-file ${_outputname}.info.cleaned
 COMMAND ${GENHTML_PATH} -o ${_outputname} ${_outputname}.info.cleaned
 COMMAND ${CMAKE_COMMAND} -E remove ${_outputname}.info ${_outputname}.info.cleaned
 
